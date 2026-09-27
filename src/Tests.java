@@ -1,6 +1,7 @@
 public class Tests {
     public static void main(String[] args) {
         testDynamicArray();
+        testLinkedList();
     }
 
     private static void testDynamicArray() {
@@ -62,6 +63,67 @@ public class Tests {
         check(largeArray.get(99999) == 99999, "Large input value");
 
         System.out.println("All DynamicArray tests passed.");
+    }
+
+    private static void testLinkedList() {
+        LinkedList list = new LinkedList();
+
+        check(list.size() == 0, "Empty linked list");
+
+        list.add(10);
+        check(list.size() == 1, "LinkedList add one element");
+        check(list.get(0) == 10, "LinkedList get one element");
+
+        list.add(20);
+        list.add(30);
+        check(list.size() == 3, "LinkedList add multiple elements");
+        check(list.get(1) == 20, "LinkedList get middle element");
+
+        list.add(1, 15);
+        check(list.get(0) == 10, "LinkedList indexed insertion keeps previous element");
+        check(list.get(1) == 15, "LinkedList indexed insertion");
+        check(list.get(2) == 20, "LinkedList indexed insertion shifts position");
+
+        list.add(20);
+        check(list.contains(20), "LinkedList contains duplicate value");
+        check(!list.contains(100), "LinkedList value not found");
+
+        int removed = list.remove(1);
+        check(removed == 15, "LinkedList remove returns correct value");
+        check(list.get(1) == 20, "LinkedList remove updates links");
+        check(list.size() == 4, "LinkedList size after removal");
+
+        list.add(0, 5);
+        check(list.get(0) == 5, "LinkedList insert at beginning");
+
+        list.add(list.size(), 40);
+        check(list.get(list.size() - 1) == 40, "LinkedList insert at end");
+
+        boolean invalidGet = false;
+        try {
+            list.get(-1);
+        } catch (IndexOutOfBoundsException e) {
+            invalidGet = true;
+        }
+        check(invalidGet, "LinkedList invalid negative index");
+
+        boolean invalidRemove = false;
+        try {
+            list.remove(list.size());
+        } catch (IndexOutOfBoundsException e) {
+            invalidRemove = true;
+        }
+        check(invalidRemove, "LinkedList invalid removal index");
+
+        LinkedList largeList = new LinkedList();
+        for (int i = 0; i < 100000; i++) {
+            largeList.add(0, i);
+        }
+
+        check(largeList.size() == 100000, "LinkedList large input size");
+        check(largeList.get(0) == 99999, "LinkedList large input value");
+
+        System.out.println("All LinkedList tests passed.");
     }
 
     private static void check(boolean condition, String testName) {
