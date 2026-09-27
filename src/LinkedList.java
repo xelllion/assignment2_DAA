@@ -2,6 +2,7 @@ public class LinkedList {
     private Node head;
     private int size;
     private long accessCount;
+    private long comparisonCount;
 
     private static class Node {
         int value;
@@ -16,6 +17,7 @@ public class LinkedList {
         head = null;
         size = 0;
         accessCount = 0;
+        comparisonCount = 0;
     }
 
     public int size() {
@@ -107,10 +109,20 @@ public class LinkedList {
         accessCount = 0;
     }
 
+    public long getComparisonCount() {
+        return comparisonCount;
+    }
+
+    public void resetComparisonCount() {
+        comparisonCount = 0;
+    }
+
     public boolean contains(int value) {
         Node current = head;
 
         while (current != null) {
+            comparisonCount++;
+
             if (current.value == value) {
                 return true;
             }

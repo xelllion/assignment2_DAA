@@ -2,11 +2,13 @@ public class DynamicArray {
     private int[] data;
     private int size;
     private long accessCount;
+    private long comparisonCount;
 
     public DynamicArray() {
         data = new int[10];
         size = 0;
         accessCount = 0;
+        comparisonCount = 0;
     }
 
     public int size() {
@@ -58,12 +60,23 @@ public class DynamicArray {
         accessCount = 0;
     }
 
+    public long getComparisonCount() {
+        return comparisonCount;
+    }
+
+    public void resetComparisonCount() {
+        comparisonCount = 0;
+    }
+
     public boolean contains(int value) {
         for (int i = 0; i < size; i++) {
+            comparisonCount++;
+
             if (data[i] == value) {
                 return true;
             }
         }
+
         return false;
     }
 
