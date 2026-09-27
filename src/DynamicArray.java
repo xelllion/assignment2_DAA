@@ -3,12 +3,14 @@ public class DynamicArray {
     private int size;
     private long accessCount;
     private long comparisonCount;
+    private long movementCount;
 
     public DynamicArray() {
         data = new int[10];
         size = 0;
         accessCount = 0;
         comparisonCount = 0;
+        movementCount = 0;
     }
 
     public int size() {
@@ -27,6 +29,7 @@ public class DynamicArray {
 
         for (int i = size; i > index; i--) {
             data[i] = data[i - 1];
+            movementCount++;
         }
 
         data[index] = value;
@@ -40,6 +43,7 @@ public class DynamicArray {
 
         for (int i = index; i < size - 1; i++) {
             data[i] = data[i + 1];
+            movementCount++;
         }
 
         size--;
@@ -66,6 +70,14 @@ public class DynamicArray {
 
     public void resetComparisonCount() {
         comparisonCount = 0;
+    }
+
+    public long getMovementCount() {
+        return movementCount;
+    }
+
+    public void resetMovementCount() {
+        movementCount = 0;
     }
 
     public boolean contains(int value) {

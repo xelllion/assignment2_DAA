@@ -46,6 +46,7 @@ public class LinkedList {
         checkPositionIndex(index);
 
         Node newNode = new Node(value);
+        accessCount++;
 
         if (index == 0) {
             newNode.next = head;
@@ -55,6 +56,7 @@ public class LinkedList {
 
             for (int i = 0; i < index - 1; i++) {
                 current = current.next;
+                accessCount++;
             }
 
             newNode.next = current.next;
@@ -75,9 +77,11 @@ public class LinkedList {
         }
 
         Node current = head;
+        accessCount++;
 
         for (int i = 0; i < index - 1; i++) {
             current = current.next;
+            accessCount++;
         }
 
         int removedValue = current.next.value;
