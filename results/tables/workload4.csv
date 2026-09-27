@@ -1,0 +1,5 @@
+n,insertion_time_ns,insertion_comparisons,extraction_time_ns,extraction_comparisons,non_decreasing
+100,21600,202,195620,850,true
+1000,5672580,2169,148240,14946,true
+10000,889520,22811,3770720,216539,true
+100000,7502460,228655,16345500,2831578,true

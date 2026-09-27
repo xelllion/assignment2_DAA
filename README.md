@@ -166,8 +166,160 @@ In addition to execution time, the experiments record the required operation-spe
 
 ## 5. Results
 
+### Workload 1 — Random Access
+
+The `get(index)` operation was executed 10,000 times using randomly generated indices.
+
+| n | Dynamic Array Time (ns) | Dynamic Array Accesses | Linked List Time (ns) | Linked List Accesses | Theoretical Complexity |
+|---:|---:|---:|---:|---:|---|
+| 100 | 4,846,860 | 10,000 | 8,154,300 | 506,793 | Array: Θ(1), List: Θ(n) |
+| 1,000 | 146,940 | 10,000 | 16,564,740 | 5,023,293 | Array: Θ(1), List: Θ(n) |
+| 10,000 | 41,140 | 10,000 | 85,934,100 | 50,147,293 | Array: Θ(1), List: Θ(n) |
+| 100,000 | 7,020 | 10,000 | 625,591,120 | 504,427,293 | Array: Θ(1), List: Θ(n) |
+
+The Dynamic Array always required 10,000 direct element accesses. The number of node accesses in the Linked List increased significantly as `n` increased.
+
+![Random Access Execution Time](results/plots/execution_time.svg)
+
+![Random Access Element Accesses](results/plots/operation_metrics.svg)
+
+
+### Workload 2 — Search
+
+The `contains(value)` operation was executed 1,000 times for each input size.
+
+| n | Dynamic Array Time (ns) | Dynamic Array Comparisons | Linked List Time (ns) | Linked List Comparisons | Theoretical Complexity |
+|---:|---:|---:|---:|---:|---|
+| 100 | 561,860 | 100,000 | 244,940 | 100,000 | Θ(n) |
+| 1,000 | 1,585,620 | 1,000,000 | 2,074,000 | 1,000,000 | Θ(n) |
+| 10,000 | 1,953,980 | 10,000,000 | 16,761,240 | 10,000,000 | Θ(n) |
+| 100,000 | 18,307,700 | 100,000,000 | 183,973,300 | 100,000,000 | Θ(n) |
+
+Both structures performed the same number of element comparisons. However, their measured execution times were different because the structures organize and access their elements differently.
+
+
+### Workload 3 — Insertion and Removal
+
+Each experiment performed 1,000 operations at the beginning or at the middle position.
+
+#### Insertion at Beginning
+
+| n | Dynamic Array Time (ns) | Movements | Linked List Time (ns) | Accesses | Theoretical Complexity |
+|---:|---:|---:|---:|---:|---|
+| 100 | 1,458,820 | 599,500 | 21,320 | 1,000 | Array: Θ(n), List: Θ(1) |
+| 1,000 | 1,006,600 | 1,499,500 | 20,340 | 1,000 | Array: Θ(n), List: Θ(1) |
+| 10,000 | 583,580 | 10,499,500 | 13,580 | 1,000 | Array: Θ(n), List: Θ(1) |
+| 100,000 | 6,496,420 | 100,499,500 | 6,820 | 1,000 | Array: Θ(n), List: Θ(1) |
+
+#### Removal at Beginning
+
+| n | Dynamic Array Time (ns) | Movements | Linked List Time (ns) | Accesses | Theoretical Complexity |
+|---:|---:|---:|---:|---:|---|
+| 100 | 1,125,280 | 549,500 | 79,740 | 0 | Array: Θ(n), List: Θ(1) |
+| 1,000 | 968,880 | 999,500 | 2,702,480 | 0 | Array: Θ(n), List: Θ(1) |
+| 10,000 | 364,460 | 9,499,500 | 11,760 | 0 | Array: Θ(n), List: Θ(1) |
+| 100,000 | 5,683,100 | 99,499,500 | 5,180 | 0 | Array: Θ(n), List: Θ(1) |
+
+#### Insertion in Middle
+
+| n | Dynamic Array Time (ns) | Movements | Linked List Time (ns) | Accesses | Theoretical Complexity |
+|---:|---:|---:|---:|---:|---|
+| 100 | 1,430,400 | 549,500 | 134,820 | 50,000 | Θ(n) |
+| 1,000 | 692,740 | 999,500 | 575,480 | 500,000 | Θ(n) |
+| 10,000 | 345,820 | 5,499,500 | 9,505,040 | 5,000,000 | Θ(n) |
+| 100,000 | 3,160,760 | 50,499,500 | 68,540,980 | 50,000,000 | Θ(n) |
+
+#### Removal in Middle
+
+| n | Dynamic Array Time (ns) | Movements | Linked List Time (ns) | Accesses | Theoretical Complexity |
+|---:|---:|---:|---:|---:|---|
+| 100 | 803,360 | 499,500 | 99,900 | 50,000 | Θ(n) |
+| 1,000 | 517,560 | 499,500 | 676,440 | 500,000 | Θ(n) |
+| 10,000 | 167,180 | 4,499,500 | 9,741,360 | 5,000,000 | Θ(n) |
+| 100,000 | 3,103,440 | 49,499,500 | 63,155,180 | 50,000,000 | Θ(n) |
+
+
+### Workload 4 — Priority Processing
+
+The Min-Heap was filled with `n` random integers and then all elements were extracted.
+
+| n | Insertion Time (ns) | Insertion Comparisons | Extraction Time (ns) | Extraction Comparisons | Non-decreasing Order | Theoretical Complexity |
+|---:|---:|---:|---:|---:|---|---|
+| 100 | 21,600 | 202 | 195,620 | 850 | true | O(n log n) total |
+| 1,000 | 5,672,580 | 2,169 | 148,240 | 14,946 | true | O(n log n) total |
+| 10,000 | 889,520 | 22,811 | 3,770,720 | 216,539 | true | O(n log n) total |
+| 100,000 | 7,502,460 | 228,655 | 16,345,500 | 2,831,578 | true | O(n log n) total |
+
+All extraction tests produced elements in non-decreasing order, confirming that the Min-Heap property was maintained during priority processing.
+
 ## 6. Discussion
+
+### Effect of Increasing Input Size
+
+Increasing `n` affected the workloads differently depending on the data structure and operation.
+
+In the random access workload, the Dynamic Array required exactly 10,000 element accesses for every input size because each `get(index)` operation directly accesses one array position. The Linked List required more node accesses as `n` increased because it had to traverse the list from the head to the requested index.
+
+In the search workload, both structures performed the same number of comparisons. The number of comparisons increased proportionally with `n`, which agrees with the linear complexity of sequential search.
+
+For insertion and removal, the results depended strongly on the position of the operation. Operations at the beginning of the Linked List required no traversal or only constant work, while the Dynamic Array had to shift many elements. In the middle of the structures, both implementations required work proportional to `n`: the Dynamic Array shifted elements and the Linked List traversed nodes.
+
+For the Min-Heap, the number of comparisons increased with `n`. Heap insertion and extraction use the height of the binary heap, which grows logarithmically.
+
+### Agreement with Theoretical Complexity
+
+The operation counts generally agreed with the theoretical analysis.
+
+Random access clearly demonstrated the difference between Θ(1) access in the Dynamic Array and Θ(n) access in the Linked List. The Dynamic Array access count remained constant, while the Linked List access count increased with the input size.
+
+Search also agreed with Θ(n) complexity. Both implementations performed up to `n` comparisons for each search operation.
+
+The insertion and removal experiments showed that operations at the beginning of a Dynamic Array require many element movements, while operations at the beginning of a Linked List require constant structural changes. Operations in the middle required linear work for both structures for different reasons.
+
+The Min-Heap comparison counts increased as the heap became larger, which is consistent with O(log n) insertion and extraction for individual operations.
+
+### Differences Between Theory and Measured Time
+
+The measured execution times did not always increase smoothly with `n`. For example, some experiments with smaller input sizes took more time than experiments with larger input sizes.
+
+This does not change the asymptotic complexity of the algorithms. Short Java benchmarks can be affected by JVM warm-up, JIT compilation, garbage collection, operating-system scheduling, caching, and other measurement noise.
+
+Asymptotic notation describes how the amount of work grows as the input becomes large. It does not predict the exact execution time of a particular run.
+
+### Same Big-O, Different Running Time
+
+Two algorithms with the same asymptotic complexity can still have different measured running times.
+
+This was visible in the search workload. Both the Dynamic Array and Linked List used linear search and performed the same number of comparisons. However, the Linked List was generally slower for large inputs.
+
+The Dynamic Array stores elements in contiguous array positions and accesses them directly. The Linked List follows references from one node to another. These implementation differences affect memory access patterns and constant factors even when the asymptotic complexity is the same.
+
+### Effect of Implementation Details
+
+Constant factors and implementation choices can have a significant effect on measured performance.
+
+The Dynamic Array may occasionally resize its internal array, which requires copying existing elements. The Linked List stores separate nodes and requires reference traversal. The Min-Heap uses an array representation and performs swaps while restoring the heap property.
+
+Therefore, theoretical complexity is important for predicting growth, while experimental measurements show the practical cost of a particular implementation.
 
 ## 7. Design Recommendations
 
+The choice of data structure should depend on the workload.
+
+A **Dynamic Array** is suitable when frequent random access is required. Its `get(index)` operation takes Θ(1) time because elements can be accessed directly by index. It is also efficient for adding elements at the end in the amortized case. However, insertion and removal near the beginning or middle can be expensive because elements must be shifted.
+
+A **Linked List** is useful when frequent insertions or removals are performed at the beginning of the structure. These operations can be completed in constant time because no element shifting is required. However, random access and operations at arbitrary positions require traversal from the head, making them less suitable for workloads with frequent indexed access.
+
+A **Min-Heap** is appropriate for priority-based processing because the minimum element can be accessed in Θ(1) time using `peekMin()`, while insertion and extraction require O(log n) time. This makes the heap suitable when elements must be repeatedly processed according to minimum priority.
+
+The experimental results show that there is no single data structure that is optimal for every workload. The expected operations and their frequency should determine which structure is selected.
+
 ## 8. Conclusion
+
+This assignment implemented and analyzed a Dynamic Array, Linked List, and Min-Heap using Java.
+
+The theoretical analysis and experimental results demonstrated how the organization of a data structure affects the performance of its operations. The Dynamic Array provided constant-time random access but required element shifting for insertion and removal at many positions. The Linked List provided efficient operations at the beginning but required traversal for indexed access and operations in the middle. The Min-Heap maintained its priority property while supporting efficient insertion, minimum access, and extraction.
+
+The experiments generally agreed with the theoretical complexity when operation counts, comparisons, accesses, and movements were considered. Measured execution times showed some variation because practical performance is also affected by JVM behavior, constant factors, memory access, and system-level effects.
+
+Overall, the results demonstrate that asymptotic analysis and empirical benchmarking should be used together when evaluating algorithms and selecting data structures for a particular workload.
