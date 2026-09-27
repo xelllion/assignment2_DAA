@@ -2,6 +2,7 @@ public class Tests {
     public static void main(String[] args) {
         testDynamicArray();
         testLinkedList();
+        testMinHeap();
     }
 
     private static void testDynamicArray() {
@@ -124,6 +125,73 @@ public class Tests {
         check(largeList.get(0) == 99999, "LinkedList large input value");
 
         System.out.println("All LinkedList tests passed.");
+    }
+
+    private static void testMinHeap() {
+        MinHeap heap = new MinHeap();
+
+        check(heap.size() == 0, "Empty heap");
+
+        heap.insert(10);
+        check(heap.size() == 1, "Heap insert one element");
+        check(heap.peekMin() == 10, "Heap peek one element");
+
+        heap.insert(5);
+        heap.insert(20);
+        heap.insert(3);
+        heap.insert(15);
+
+        check(heap.size() == 5, "Heap insert multiple elements");
+        check(heap.peekMin() == 3, "Heap minimum after insertions");
+
+        heap.insert(3);
+        check(heap.peekMin() == 3, "Heap duplicate minimum");
+
+        int first = heap.extractMin();
+        check(first == 3, "Heap extract minimum");
+        check(heap.peekMin() == 3, "Heap property after extraction");
+
+        int[] expected = {3, 5, 10, 15, 20};
+
+        for (int value : expected) {
+            check(heap.extractMin() == value, "Heap non-decreasing extraction");
+        }
+
+        check(heap.size() == 0, "Heap empty after extractions");
+
+        boolean emptyPeek = false;
+        try {
+            heap.peekMin();
+        } catch (IllegalStateException e) {
+            emptyPeek = true;
+        }
+        check(emptyPeek, "Heap peek on empty heap");
+
+        boolean emptyExtract = false;
+        try {
+            heap.extractMin();
+        } catch (IllegalStateException e) {
+            emptyExtract = true;
+        }
+        check(emptyExtract, "Heap extract on empty heap");
+
+        MinHeap largeHeap = new MinHeap();
+
+        for (int i = 100000; i >= 1; i--) {
+            largeHeap.insert(i);
+        }
+
+        check(largeHeap.size() == 100000, "Heap large input size");
+
+        int previous = largeHeap.extractMin();
+
+        while (largeHeap.size() > 0) {
+            int current = largeHeap.extractMin();
+            check(previous <= current, "Heap large input order");
+            previous = current;
+        }
+
+        System.out.println("All MinHeap tests passed.");
     }
 
     private static void check(boolean condition, String testName) {
