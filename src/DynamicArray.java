@@ -1,10 +1,12 @@
 public class DynamicArray {
     private int[] data;
     private int size;
+    private long accessCount;
 
     public DynamicArray() {
         data = new int[10];
         size = 0;
+        accessCount = 0;
     }
 
     public int size() {
@@ -44,7 +46,16 @@ public class DynamicArray {
 
     public int get(int index) {
         checkElementIndex(index);
+        accessCount++;
         return data[index];
+    }
+
+    public long getAccessCount() {
+        return accessCount;
+    }
+
+    public void resetAccessCount() {
+        accessCount = 0;
     }
 
     public boolean contains(int value) {

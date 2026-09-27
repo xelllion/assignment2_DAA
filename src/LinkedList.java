@@ -1,6 +1,7 @@
 public class LinkedList {
     private Node head;
     private int size;
+    private long accessCount;
 
     private static class Node {
         int value;
@@ -14,6 +15,7 @@ public class LinkedList {
     public LinkedList() {
         head = null;
         size = 0;
+        accessCount = 0;
     }
 
     public int size() {
@@ -87,12 +89,22 @@ public class LinkedList {
         checkElementIndex(index);
 
         Node current = head;
+        accessCount++;
 
         for (int i = 0; i < index; i++) {
             current = current.next;
+            accessCount++;
         }
 
         return current.value;
+    }
+
+    public long getAccessCount() {
+        return accessCount;
+    }
+
+    public void resetAccessCount() {
+        accessCount = 0;
     }
 
     public boolean contains(int value) {
