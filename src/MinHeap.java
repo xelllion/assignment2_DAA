@@ -1,10 +1,12 @@
 public class MinHeap {
     private int[] data;
     private int size;
+    private long comparisonCount;
 
     public MinHeap() {
         data = new int[10];
         size = 0;
+        comparisonCount = 0;
     }
 
     public int size() {
@@ -20,6 +22,8 @@ public class MinHeap {
 
         while (current > 0) {
             int parent = (current - 1) / 2;
+
+            comparisonCount++;
 
             if (data[parent] <= data[current]) {
                 break;
@@ -55,12 +59,20 @@ public class MinHeap {
             int right = 2 * current + 2;
             int smallest = current;
 
-            if (left < size && data[left] < data[smallest]) {
-                smallest = left;
+            if (left < size) {
+                comparisonCount++;
+
+                if (data[left] < data[smallest]) {
+                    smallest = left;
+                }
             }
 
-            if (right < size && data[right] < data[smallest]) {
-                smallest = right;
+            if (right < size) {
+                comparisonCount++;
+
+                if (data[right] < data[smallest]) {
+                    smallest = right;
+                }
             }
 
             if (smallest == current) {
@@ -72,6 +84,14 @@ public class MinHeap {
         }
 
         return min;
+    }
+
+    public long getComparisonCount() {
+        return comparisonCount;
+    }
+
+    public void resetComparisonCount() {
+        comparisonCount = 0;
     }
 
     private void ensureCapacity() {

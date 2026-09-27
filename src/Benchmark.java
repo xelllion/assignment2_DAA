@@ -12,6 +12,7 @@ public class Benchmark {
         runRandomAccessWorkload();
         runSearchWorkload();
         runInsertionRemovalWorkload();
+        runPriorityProcessingWorkload();
     }
 
     private static void runRandomAccessWorkload() {
@@ -295,6 +296,74 @@ public class Benchmark {
                     listRemoveMiddleTime / REPETITIONS,
                     listRemoveMiddleAccesses / REPETITIONS);
 
+            System.out.println();
+        }
+    }
+
+    private static void runPriorityProcessingWorkload() {
+        System.out.println("Workload 4 - Priority Processing");
+        System.out.println();
+
+        for (int n : SIZES) {
+            int[] values = generateValues(n);
+
+            double insertionTotalTime = 0;
+            double extractionTotalTime = 0;
+            long insertionComparisons = 0;
+            long extractionComparisons = 0;
+            boolean sorted = true;
+
+            for (int repetition = 0; repetition < REPETITIONS; repetition++) {
+                MinHeap heap = new MinHeap();
+
+                heap.resetComparisonCount();
+
+                long start = System.nanoTime();
+
+                for (int value : values) {
+                    heap.insert(value);
+                }
+
+                long end = System.nanoTime();
+
+                insertionTotalTime += end - start;
+                insertionComparisons += heap.getComparisonCount();
+
+                heap.resetComparisonCount();
+
+                start = System.nanoTime();
+
+                int previous = heap.extractMin();
+
+                while (heap.size() > 0) {
+                    int current = heap.extractMin();
+
+                    if (previous > current) {
+                        sorted = false;
+                    }
+
+                    previous = current;
+                }
+
+                end = System.nanoTime();
+
+                extractionTotalTime += end - start;
+                extractionComparisons += heap.getComparisonCount();
+            }
+
+            System.out.println("n = " + n);
+
+            System.out.printf("Insertion: %.0f ns%n",
+                    insertionTotalTime / REPETITIONS);
+            System.out.println("Insertion comparisons: "
+                    + insertionComparisons / REPETITIONS);
+
+            System.out.printf("Extraction: %.0f ns%n",
+                    extractionTotalTime / REPETITIONS);
+            System.out.println("Extraction comparisons: "
+                    + extractionComparisons / REPETITIONS);
+
+            System.out.println("Non-decreasing order: " + sorted);
             System.out.println();
         }
     }
